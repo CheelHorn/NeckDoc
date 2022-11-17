@@ -1,7 +1,12 @@
 <template>
-    <div v-for="user in getUsers" :key="user">
+  <div>
+    <h1 class="text-3xl font-bold underline">
+    Hello world!
+  </h1>
+  <div v-for="user in getUsers" :key="user">
         {{user}}
-    </div>
+  </div>
+  </div>
 </template>
 
 <script>
@@ -17,8 +22,8 @@ export default {
     currentUser() {
       return this.$store.getters.getCurrentUser;
     },
-    istAuthenticated() {
-      return this.$store.getters.istAuthenticated;
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
     },
     getUsers() {
       return this.$store.state.users

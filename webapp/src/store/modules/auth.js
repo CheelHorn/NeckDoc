@@ -21,16 +21,19 @@ const actions = {
         const token = await AuthService.login(loginData);
         commit('set_token', token);
 
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token.access_token}`;
+
         const user = await AuthService.me();
         commit('set_current_user', user);
-
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
+        
         return await Promise.resolve(loginData);
     },
     logout: ({ commit }) => {
         commit('set_token', null);
         commit('set_current_user', null);
+
+        axios.defaults.headers.common['Authorization'] = ``;
+
     },
 
     // eslint-disable-next-line
