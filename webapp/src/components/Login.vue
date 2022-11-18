@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div>
         <form @submit.prevent="login">
           <div>
@@ -18,6 +19,7 @@
           <font-awesome-icon icon="sign-in-alt" /> Sign Up
         </router-link>
     </div>
+  </div>
 </template>
 
 <script>
