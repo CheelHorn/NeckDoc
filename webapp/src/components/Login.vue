@@ -1,24 +1,22 @@
 <template>
-  <div>
     <div>
-        <form @submit.prevent="login">
-          <div>
-            <label for="username">Username:</label>
-            <input type="text" name="username" v-model="form.username" />
-          </div>
-          <div>
-            <label for="password">Password:</label>
-            <input type="password" name="password" v-model="form.password" />
-          </div>
-          <button type="submit">Log in</button>
-        </form>
-        <div v-if="message">
-            {{ message }}
+      <form @submit.prevent="login">
+        <div>
+          <label for="username">Username:</label>
+          <input type="text" name="username" v-model="form.username" />
         </div>
-        <router-link to="/signup" class="nav-link">
-          <font-awesome-icon icon="sign-in-alt" /> Sign Up
-        </router-link>
-    </div>
+        <div>
+          <label for="password">Password:</label>
+          <input type="password" name="password" v-model="form.password" />
+        </div>
+        <button type="submit">Log in</button>
+      </form>
+      <div v-if="message">
+          {{ message }}
+      </div>
+      <router-link to="/signup" class="nav-link">
+        Sign Up
+      </router-link>
   </div>
 </template>
 
@@ -56,7 +54,6 @@ export default {
 
       try {
         await this.$store.dispatch('login', user);
-        console/
         this.$router.push('/home');
       } catch (error) {
         this.message = error.toString();
