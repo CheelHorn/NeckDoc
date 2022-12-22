@@ -10,6 +10,12 @@ class UserService {
             .then(response => response.data);
     }
 
+    getUserById(userId) {
+        return axios
+            .get(API_URL + '/' + userId)
+            .then(response => response.data);
+    }
+
     async updateUser(userId, user) {
         console.log(user)
         const response = await axios

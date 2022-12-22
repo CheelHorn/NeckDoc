@@ -1,23 +1,23 @@
 <template>
     <div>
         <form @submit.prevent="update">
-            <div>
+            <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" name="email" v-model="form.email" />
+                <input type="email" class="form-control" name="email" v-model="form.email" />
             </div>
-            <div>
+            <div class="form-group">
                 <label for="firstname">Firstname:</label>
-                <input type="text" name="firstname" v-model="form.firstname" />
+                <input type="text" class="form-control" name="firstname" v-model="form.firstname" />
             </div>
-            <div>
+            <div class="form-group">
                 <label for="surname">Surname:</label>
-                <input type="text" name="surname" v-model="form.surname" />
+                <input type="text" class="form-control" name="surname" v-model="form.surname" />
             </div>
-            <div>
+            <div class="form-group">
                 <label for="dateOfBirth">Date of birth:</label>
-                <input type="date" name="dateOfBirth" v-model="form.dateOfBirth" />
+                <input type="date" class="form-control" name="dateOfBirth" v-model="form.dateOfBirth" />
             </div>
-            <button type="submit">Update</button>
+            <button type="submit" class="btn btn-primary">Update</button>
         </form>
         <div v-if="message">
             {{ message }}

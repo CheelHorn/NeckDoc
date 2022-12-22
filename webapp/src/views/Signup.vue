@@ -1,20 +1,24 @@
 <template>
-    <div>
-        <form @submit.prevent="signup">
-          <div>
-            <label for="username">Username:</label>
-            <input type="text" name="username" v-model="form.username" />
-          </div>
-          <div>
-            <label for="password">Password:</label>
-            <input type="password" name="password" v-model="form.password" />
-          </div>
-          <button type="submit">Sign Up</button>
-        </form>
-        <div v-if="message">
-            {{ message }}
+  <div>
+    <form @submit.prevent="signup">
+      <div class="form-group row">
+        <label for="username" class="col-sm-2 col-form-label">Username:</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="username" v-model="form.username" />
         </div>
+      </div>
+      <div class="form-group row">
+        <label for="password" class="col-sm-2 col-form-label">Password:</label>
+        <div class="col-sm-10">
+          <input type="password" class="form-control" name="password" v-model="form.password" />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+    <div v-if="message">
+        {{ message }}
     </div>
+  </div>
 </template>
 
 <script>

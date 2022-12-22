@@ -5,6 +5,9 @@ import App from './App.vue'
 import router from './router';
 import store from './store';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';
+
 //axios.defaults.headers.common['Authorization'] = `Bearer ${store.getters.isAuthenticated.access_token}`;
 axios.defaults.baseURL = 'http://localhost:8081/';
 

@@ -11,6 +11,12 @@ const actions = {
         return await Promise.resolve(users);
     },
 
+    getUserById : async ({ commit }, [userId]) => {
+        const user = await UserService.getUserById(userId);
+        commit('set_user', users);
+        return await Promise.resolve(user)
+    },
+
     updateUser: async( { commit }, [userId, user]) => {
         
         const updatedUser = await UserService.updateUser(userId, user);
@@ -25,6 +31,9 @@ const mutations = {
     set_users: (state, users) => {
         state.users = users;
     },
+    set_user: (state, user) => {
+        state.user = user;
+    }
 };
 
 export default {
