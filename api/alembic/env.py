@@ -23,12 +23,12 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-from models.models import Base
+from db.models import Base
 
-from models.users import User
-from models.exercises import Exercise
+from db.models import User
+from db.models import Exercise
 
-target_metadata = [User.Base.metadata, Exercise.Base.metadata]
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

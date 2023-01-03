@@ -3,7 +3,7 @@ from typing import Optional
 from fastapi import Depends
 
 # SQLAlchemy Models
-from models.users import User as UserModel
+from db.models import User as UserModel
 
 # CRUD functions for users
 from crud import UsersService, get_users_service

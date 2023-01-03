@@ -7,7 +7,7 @@ from utils.auth import create_access_token
 from utils.dependencies import get_current_user
 
 # SQLAlchemy Models
-from models.users import User as UserModel
+from db.models import User as UserModel
 
 # Pydantic schema
 from schemas.users import User, UserCreate, UserUpdate

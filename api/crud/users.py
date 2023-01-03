@@ -4,7 +4,7 @@ import sqlalchemy
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
-from models.users import User
+from db.models import User
 from schemas.users import UserCreate, UserUpdate
 
 from .base import BaseService

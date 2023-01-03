@@ -1,5 +1,4 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from utils.config import SQLALCHEMY_DATABASE_URL
@@ -9,8 +8,6 @@ engine = create_engine(
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-Base = declarative_base()
-
 # DB Session
 def get_db():
     db = SessionLocal()
@@ -18,9 +15,3 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
-#from models import users as user_model
-
-#user_model.Base.metadata.drop_all(bind=engine)
-#user_model.Base.metadata.create_all(bind=engine)
