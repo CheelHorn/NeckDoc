@@ -1,13 +1,14 @@
-import os
+from typing import Optional
+
 from datetime import datetime, timedelta
 
+from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 
-from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-from jose import jwt
+from jose import jwt, JWTError
 
-from crud import users as user_crud
+from schemas.token import TokenData
 
 from utils.config import JWT_SECRET, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
@@ -15,6 +16,11 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+credentials_exception = HTTPException(
+    status_code=401,
+    detail="Could not validate credentials",
+    headers={"WWW-Authenticate": "Bearer"},
+)
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -23,16 +29,6 @@ def verify_password(plain_password, hashed_password):
 def get_password_hash(password):
     return pwd_context.hash(password)
 
-
-def authenticate_user(email: str, password: str, db: Session):
-    user = user_crud.get_user_by_email(db, email)
-
-    if not user:
-        return None
-    if not verify_password(password, user.hashed_password):
-        return None
-
-    return user
 
 def create_access_token(sub: str):
     payload = {}
@@ -47,3 +43,19 @@ def create_access_token(sub: str):
     encoded_jwt = jwt.encode(payload, JWT_SECRET, algorithm=ALGORITHM)
     
     return encoded_jwt
+
+
+def decode_token_data(token: str = Depends(oauth2_scheme)) -> Optional[str]:
+    try:
+        payload = jwt.decode(
+            token,
+            JWT_SECRET,
+            algorithms=[ALGORITHM],
+            options={"verify_aud": False},
+        )
+        username: str = payload.get("sub")
+        token_data = TokenData(username=username)
+    except JWTError:
+        raise credentials_exception
+
+    return token_data

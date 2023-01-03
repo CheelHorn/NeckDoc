@@ -10,3 +10,17 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
+# DB Session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+#from models import users as user_model
+
+#user_model.Base.metadata.drop_all(bind=engine)
+#user_model.Base.metadata.create_all(bind=engine)

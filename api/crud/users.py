@@ -1,36 +1,46 @@
+from typing import Any, Optional
+
+import sqlalchemy
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 
-# SQlAlchemy model
-from models import users as user_model
+from models.users import User
+from schemas.users import UserCreate, UserUpdate
 
-# Pydantic schema
-from schemas import users as user_schema
+from .base import BaseService
 
-from utils import auth
+from utils.auth import get_password_hash, verify_password
 
-def get_user(db: Session, user_id: int):
-    return db.query(user_model.User).filter(user_model.User.id == user_id).first()
 
-def get_user_by_email(db: Session, email: str):
-    return db.query(user_model.User).filter(user_model.User.email == email).first()
+class UsersService(BaseService[User, UserCreate, UserUpdate]):
+    def __init__(self, db_session: Session):
+        super(UsersService, self).__init__(User, db_session)
 
-def get_users(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(user_model.User).offset(skip).limit(limit).all()
+    def create(self, obj: UserCreate) -> User:
+        db_obj: User = self.model(email=obj.email, hashed_password=get_password_hash(obj.password))
+        self.db_session.add(db_obj)
+        try:
+            self.db_session.commit()
+        except sqlalchemy.exc.IntegrityError as e:
+            self.db_session.rollback()
+            if "duplicate key" in str(e):
+                raise HTTPException(status_code=409, detail="Conflict Error")
+            else:
+                raise e
+        return db_obj
 
-def create_user(db: Session, user: user_schema.UserCreate):
-    hashed_password = auth.get_password_hash(user.password)
-    db_user = user_model.User(email=user.email, hashed_password=hashed_password)
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
 
-def update_user(db: Session, user_id: int, user: user_schema.UserUpdate):
-    db_user = get_user(db, user_id=user_id)
-    for var, value in vars(user).items():
-        setattr(db_user, var, value) if value else None
-    #db_user.modified = datetime.utcnow()
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+    def get_by_email(self, email: Any) -> Optional[User]:
+        obj: Optional[User] = self.db_session.query(User).filter(User.email == email).first()
+        if obj is None:
+            raise HTTPException(status_code=404, detail="Not Found")
+        return obj
+
+
+    def authenticate_user(self, email: str, password: str) -> Optional[User]:
+        db_obj: User = self.get_by_email(email)
+        if not db_obj:
+            return None
+        if not verify_password(password, db_obj.hashed_password):
+            return None
+        return db_obj

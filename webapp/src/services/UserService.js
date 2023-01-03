@@ -17,9 +17,8 @@ class UserService {
     }
 
     async updateUser(userId, user) {
-        console.log(user)
         const response = await axios
-            .post(API_URL + userId, user);
+            .patch(API_URL + userId, user);
 
         return response.data
     }

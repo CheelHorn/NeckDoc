@@ -1,6 +1,7 @@
 from typing import Optional
 
 from pydantic import BaseModel
+from pydantic.types import UUID4
 
 from datetime import date
 
@@ -20,7 +21,7 @@ class UserUpdate(BaseModel):
         orm_mode = True
 
 class User(UserBase):
-    id: int
+    id: UUID4
     firstname: Optional[str] = None
     surname: Optional[str] = None
     date_of_birth: Optional[date] = None

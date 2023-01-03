@@ -1,19 +1,17 @@
+from typing import Any
+
 from fastapi import Depends, FastAPI, HTTPException, File, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 
-from sqlalchemy.orm import Session
+# SQLAlchemy Models
+from models.users import User as UserModel
+
+# CRUD functions for users
+from crud import UsersService, get_users_service
 
 from routes import auth, users
 
-from utils.auth import authenticate_user, create_access_token
-from utils.dependencies import get_db
-
-from models import users as user_model
-from db.session import engine
-
-#user_model.Base.metadata.drop_all(bind=engine)
-#user_model.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -34,15 +32,16 @@ app.include_router(auth.router)
 app.include_router(users.router)
 
 
-# Only for swagger authorize demonstration
-@app.post("/token")
-def login_user(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(email=form_data.username, password=form_data.password, db=db)
-
+# Change to login, only for swagger demonstration
+@app.post("/token", responses={400: {"description": "Incorrect username or password"}},)
+async def login_user(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    user_service: UsersService = Depends(get_users_service),
+) -> Any:
+    user: UserModel = user_service.authenticate_user(email=form_data.username, password=form_data.password)
     if not user:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
-
+        raise HTTPException(status_code=400)
     return {
-        "access_token": create_access_token(sub=user.email),
+        "access_token": auth.create_access_token(sub=user.email),
         "token_type": "bearer",
     }

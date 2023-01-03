@@ -2,7 +2,7 @@ import AuthService from "@/services/AuthService";
 import axios from "axios";
 
 const state = {
-    user: null,
+    current_user: null,
     token: null,
 };
 
@@ -11,7 +11,7 @@ const getters = {
         return state.token;
     },
     getCurrentUser: state => {
-        return state.user;
+        return state.current_user;
     }
 };
 
@@ -49,7 +49,7 @@ const mutations = {
         state.token = token;
     },
     set_current_user: (state, user) => {
-        state.user = user;
+        state.current_user = user;
     },
 };
 

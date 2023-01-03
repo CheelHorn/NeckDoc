@@ -1,6 +1,7 @@
 import UserService from '@/services/UserService';
 
 const state = {
+    user: null,
     users: null,
   };
 
@@ -13,7 +14,7 @@ const actions = {
 
     getUserById : async ({ commit }, [userId]) => {
         const user = await UserService.getUserById(userId);
-        commit('set_user', users);
+        commit('set_user', user);
         return await Promise.resolve(user)
     },
 
