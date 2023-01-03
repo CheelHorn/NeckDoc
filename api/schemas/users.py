@@ -17,9 +17,6 @@ class UserUpdate(BaseModel):
     surname: Optional[str] = None
     date_of_birth: Optional[date] = None
 
-    class Config:
-        orm_mode = True
-
 class User(UserBase):
     id: UUID4
     firstname: Optional[str] = None
