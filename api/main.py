@@ -10,7 +10,7 @@ from db.models import User as UserModel
 # CRUD functions for users
 from crud import UsersService, get_users_service
 
-from routes import auth, users
+from routes import auth, users, exercises
 
 
 app = FastAPI()
@@ -30,6 +30,7 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(users.router)
+app.include_router(exercises.router)
 
 
 # Change to login, only for swagger demonstration

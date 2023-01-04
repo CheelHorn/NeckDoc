@@ -8,3 +8,6 @@ ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@db:5432/postgres"
 
 BUFF_SIZE = 65536
+
+# file paths
+EXERCISE_IMAGES_PATH = "/assets/images/exercise/"

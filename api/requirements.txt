@@ -1,6 +1,7 @@
 fastapi
 sqlalchemy
 pydantic
+pydantic[email]
 uvicorn
 psycopg2
 python-jose

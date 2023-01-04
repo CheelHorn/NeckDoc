@@ -17,8 +17,8 @@ class UsersService(BaseService[User, UserCreate, UserUpdate]):
         super(UsersService, self).__init__(User, db_session)
 
     def create(self, obj: UserCreate) -> User:
-        db_obj: User = self.model(email=obj.email, hashed_password=get_password_hash(obj.password))
-        self.db_session.add(db_obj)
+        user: User = self.model(email=obj.email, hashed_password=get_password_hash(obj.password))
+        self.db_session.add(user)
         try:
             self.db_session.commit()
         except sqlalchemy.exc.IntegrityError as e:
@@ -27,20 +27,20 @@ class UsersService(BaseService[User, UserCreate, UserUpdate]):
                 raise HTTPException(status_code=409, detail="Conflict Error")
             else:
                 raise e
-        return db_obj
+        return user
 
 
     def get_by_email(self, email: Any) -> Optional[User]:
-        obj: Optional[User] = self.db_session.query(User).filter(User.email == email).first()
-        if obj is None:
+        user: Optional[User] = self.db_session.query(User).filter(User.email == email).first()
+        if not user:
             raise HTTPException(status_code=404, detail="Not Found")
-        return obj
+        return user
 
 
-    def authenticate_user(self, email: str, password: str) -> Optional[User]:
-        db_obj: User = self.get_by_email(email)
-        if not db_obj:
+    def authenticate_user(self, email: Any, password: str) -> Optional[User]:
+        user: Optional[User] = self.get_by_email(email)
+        if not user:
+            raise HTTPException(status_code=404, detail="Not Found")
+        if not verify_password(password, user.hashed_password):
             return None
-        if not verify_password(password, db_obj.hashed_password):
-            return None
-        return db_obj
+        return user

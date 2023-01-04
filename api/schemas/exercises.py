@@ -1,18 +1,23 @@
 from typing import Optional
 
 from pydantic import BaseModel
-from pydantic.types import UUID4
+from pydantic.types import UUID4, conint
 
 from datetime import date
 
 class ExerciseBase(BaseModel):
-    name: str
+    name: Optional[str]
+    description: Optional[str]
+    image_path: Optional[str]
+    difficulty: Optional[conint(ge=0, le=5)]
 
 class ExerciseCreate(ExerciseBase):
-    pass
+    name: str
 
 class ExerciseUpdate(ExerciseBase):
-    pass
+
+    class Config:
+        orm_mode = True
 
 class Exercise(ExerciseBase):
     id: UUID4

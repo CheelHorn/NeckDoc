@@ -7,7 +7,7 @@ from utils.auth import create_access_token
 from utils.dependencies import get_current_user
 
 # SQLAlchemy Models
-from db.models import User as UserModel
+from db import models
 
 # Pydantic schema
 from schemas.users import User, UserCreate, UserUpdate
@@ -25,7 +25,7 @@ router = APIRouter(
 async def create_user(
     new_user: UserCreate,
     user_service: UsersService = Depends(get_users_service),
-) -> Optional[UserModel]:
+) -> Optional[models.User]:
     return user_service.create(new_user)
 
 
@@ -35,7 +35,7 @@ async def login_user(
     form_data: OAuth2PasswordRequestForm = Depends(),
     user_service: UsersService = Depends(get_users_service),
 ) -> Any:
-    user: UserModel = user_service.authenticate_user(email=form_data.username, password=form_data.password)
+    user: models.User = user_service.authenticate_user(email=form_data.username, password=form_data.password)
     if not user:
         raise HTTPException(status_code=400)
     return {
@@ -46,6 +46,6 @@ async def login_user(
 
 @router.get("/me", response_model=User)
 async def get_me(
-    current_user: UserModel = Depends(get_current_user),
-) -> Optional[UserModel]:
+    current_user: models.User = Depends(get_current_user),
+) -> Optional[models.User]:
     return current_user

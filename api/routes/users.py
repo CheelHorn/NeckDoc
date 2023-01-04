@@ -6,7 +6,7 @@ from pydantic.types import UUID4
 from utils.dependencies import get_current_user
 
 # SQLAlchemy Models
-from db.models import User as UserModel
+from db import models
 
 # Pydantic schema
 from schemas.users import User, UserCreate, UserUpdate
@@ -25,7 +25,7 @@ async def get_users(
     skip: int = 0,
     limit: int = 100,
     user_service: UsersService = Depends(get_users_service),
-) -> List[UserModel]:
+) -> List[models.User]:
     return user_service.list(skip=skip, limit=limit)
 
 
@@ -33,7 +33,7 @@ async def get_users(
 async def get_user(
     user_id: UUID4,
     user_service: UsersService = Depends(get_users_service),
-) -> Optional[UserModel]:
+) -> Optional[models.User]:
     return user_service.get(user_id)
 
 
@@ -43,7 +43,7 @@ async def update_user(
     user: UserUpdate,
     current_user: User = Depends(get_current_user),
     user_service: UsersService = Depends(get_users_service),
-) -> Optional[UserModel]:
+) -> Optional[models.User]:
     if user_id != current_user.id:
         raise HTTPException(status_code=401)
     return user_service.update(user_id, user)
