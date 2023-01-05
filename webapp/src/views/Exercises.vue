@@ -1,16 +1,20 @@
 <template>
   <div>
-    <h1 class="text-3xl font-bold underline">
-      Hello world!!!
-    </h1>
+    <ExerciseCard
+      v-for="exercise in exercises"
+      :key="exercise"
+      :exercise="exercise"
+    ></ExerciseCard>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'App',
-  components: {
+import ExerciseCard from '@/components/ExerciseCard.vue';
 
+export default {
+  name: 'ExercisesPage',
+  components: {
+    ExerciseCard
   },
   data() {
     return {};
@@ -21,12 +25,16 @@ export default {
     },
     isAuthenticated() {
       return this.$store.getters.isAuthenticated;
+    },
+    exercises() {
+      return this.$store.state.exercises.exercises
     }
   },
   mounted() {
     if (!this.currentUser) {
       this.$router.push('/login');
     }
+    this.$store.dispatch('getExercises');
   }
 };
 </script>

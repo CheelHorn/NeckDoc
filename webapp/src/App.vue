@@ -18,6 +18,16 @@
               </router-link>
             </li>
             <li class="nav-item">
+              <router-link to="/users" class="nav-link">
+                Users
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/exercises" class="nav-link">
+                Exercises
+              </router-link>
+            </li>
+            <li class="nav-item">
               <router-link to="/profile" class="nav-link">
                 Profile
               </router-link>

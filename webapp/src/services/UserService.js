@@ -16,11 +16,10 @@ class UserService {
             .then(response => response.data);
     }
 
-    async updateUser(userId, user) {
-        const response = await axios
-            .patch(API_URL + userId, user);
-
-        return response.data
+    updateUser(userId, user) {
+        return axios
+            .patch(API_URL + userId, user)
+            .then(response => response.data);
     }
 }
 

@@ -25,22 +25,18 @@ const actions = {
 
         const user = await AuthService.me();
         commit('set_current_user', user);
-        
-        return await Promise.resolve(loginData);
     },
+
     logout: ({ commit }) => {
         commit('set_token', null);
         commit('set_current_user', null);
 
         axios.defaults.headers.common['Authorization'] = ``;
-
     },
 
     // eslint-disable-next-line
     signup: async ({ commit }, signupData) => {
-        const user = await AuthService.signup(signupData);
-
-        return await Promise.resolve(user);
+        await AuthService.signup(signupData);
     }
 };
 

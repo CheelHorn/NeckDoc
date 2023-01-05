@@ -10,8 +10,8 @@
                 <input type="text" class="form-control" name="firstname" v-model="form.firstname" />
             </div>
             <div class="form-group">
-                <label for="surname">Surname:</label>
-                <input type="text" class="form-control" name="surname" v-model="form.surname" />
+                <label for="lastname">Lastname:</label>
+                <input type="text" class="form-control" name="lastname" v-model="form.lastname" />
             </div>
             <div class="form-group">
                 <label for="dateOfBirth">Date of birth:</label>
@@ -34,7 +34,7 @@ export default {
             form: {
                 email: '',
                 firstname: '',
-                surname: '',
+                lastname: '',
                 dateOfBirth: ''
             },
             message: '',
@@ -52,7 +52,7 @@ export default {
 
         this.form.email = this.currentUser.email,
         this.form.firstname = this.currentUser.firstname,
-        this.form.surname = this.currentUser.surname,
+        this.form.lastname = this.currentUser.lastname,
         this.form.dateOfBirth = this.currentUser.date_of_birth
     },
     methods: {
@@ -60,11 +60,9 @@ export default {
             const user = {
                 'email': this.form.email,
                 'firstname': this.form.firstname,
-                'surname': this.form.surname,
+                'lastname': this.form.lastname,
                 'date_of_birth': this.form.dateOfBirth
             };
-
-            console.log(user)
 
             try {
                 await this.$store.dispatch('updateUser', [this.currentUser.id, user]);
