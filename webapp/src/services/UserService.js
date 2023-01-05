@@ -12,7 +12,7 @@ class UserService {
 
     getUserById(userId) {
         return axios
-            .get(API_URL + '/' + userId)
+            .get(API_URL + userId)
             .then(response => response.data);
     }
 

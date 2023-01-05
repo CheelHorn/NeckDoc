@@ -11,7 +11,7 @@ class ExerciseService {
 
     getExerciseById(exerciseId) {
         return axios
-            .get(API_URL + '/' + exerciseId)
+            .get(API_URL + exerciseId)
             .then(response => response.data);
     }
 
@@ -29,8 +29,14 @@ class ExerciseService {
 
     deleteExercise(exerciseId) {
         return axios
-            .delete(API_URL + '/' + exerciseId)
+            .delete(API_URL + exerciseId)
             .then(response => response);
+    }
+
+    async getExerciseImage(exerciseId) {
+        const response = await axios
+            .get(API_URL + exerciseId + '/image', { responseType: 'blob' });
+        return response.data;
     }
 }
 
