@@ -5,6 +5,7 @@ import SignupPage from "./views/Signup.vue";
 import UsersPage from "./views/Users.vue";
 import ProfilePage from "./views/Profile.vue";
 import ExercisesPage from "./views/Exercises.vue";
+import ExercisePage from "./views/Exercise.vue";
 
 const routes = [
     {
@@ -23,6 +24,11 @@ const routes = [
     {
         path: "/exercises",
         component: ExercisesPage,
+    },
+    {
+        path: "/exercise/:id",
+        component: ExercisePage,
+        props: true
     },
     {
         path: "/login",

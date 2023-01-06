@@ -8,7 +8,7 @@ export default {
         getExercises: async ({ commit }) => {
             const exercises = await ExerciseService.getAllExercises();
             commit('set_exercises', exercises);
-        }
+        },
     },
     mutations: {
         set_exercises: (state, exercises) => {

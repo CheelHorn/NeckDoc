@@ -3,34 +3,34 @@ import axios from "axios";
 const API_URL = 'http://localhost:8081/exercises/'
 
 class ExerciseService {
-    getAllExercises() {
-        return axios
-            .get(API_URL)
-            .then(response => response.data);
+    async getAllExercises() {
+        const response = await axios
+            .get(API_URL);
+        return response.data;
     }
 
-    getExerciseById(exerciseId) {
-        return axios
-            .get(API_URL + exerciseId)
-            .then(response => response.data);
+    async getExerciseById(exerciseId) {
+        const response = await axios
+            .get(API_URL + exerciseId);
+        return response.data;
     }
 
-    createExercise(exercise) {
-        return axios
-            .post(API_URL, exercise)
-            .then(response => response.data)
+    async createExercise(exercise) {
+        const response = await axios
+            .post(API_URL, exercise);
+        return response.data;
     }
 
-    updateExercise(exerciseId, exercise) {
-        return axios
-            .patch(API_URL + exerciseId, exercise)
-            .then(response => response.data);
+    async updateExercise(exerciseId, exercise) {
+        const response = await axios
+            .patch(API_URL + exerciseId, exercise);
+        return response.data;
     }
 
-    deleteExercise(exerciseId) {
-        return axios
-            .delete(API_URL + exerciseId)
-            .then(response => response);
+    async deleteExercise(exerciseId) {
+        const response = await axios
+            .delete(API_URL + exerciseId);
+        return response;
     }
 
     async getExerciseImage(exerciseId) {

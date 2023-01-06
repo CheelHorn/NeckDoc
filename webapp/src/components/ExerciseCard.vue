@@ -15,6 +15,7 @@
 import ExerciseService from '@/services/ExerciseService';
 
 export default {
+  name: 'ExerciseCard',
   props: ['exercise'],
   data() {
     return {
