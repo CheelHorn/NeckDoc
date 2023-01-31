@@ -4,13 +4,13 @@ from fastapi import APIRouter, Depends, Response, File, UploadFile, HTTPExceptio
 from fastapi.responses import FileResponse
 from pydantic.types import UUID4
 
-# SQLAlchemy Models
-from db import models
-
-# Pydantic schema
+# Pydantic schemas
 from schemas.exercise import Exercise, ExerciseCreate, ExerciseUpdate
 
-# Service functions for users
+# SQLAlchemy models
+from db import models
+
+# Service functions
 from services import ExcerciseService, get_exercise_service
 
 from utils.file_handling import image_whitelist

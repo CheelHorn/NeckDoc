@@ -8,11 +8,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from db.models import User as UserModel
 
 # Service functions for users
-from services import UsersService, get_users_service
+from services import UserService, get_user_service
 
-from routes import auth, user, exercise, training
-
-from routes.training import TrainingRouter
+from routes import auth, user, patient, exercise, training, therapy
 
 
 app = FastAPI()
@@ -32,15 +30,17 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(user.router)
+app.include_router(patient.router)
 app.include_router(exercise.router)
 app.include_router(training.router)
+app.include_router(therapy.router)
 
 
 # Change to login, only for swagger demonstration
 @app.post("/token", responses={400: {"description": "Incorrect username or password"}},)
 async def login_user(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    user_service: UsersService = Depends(get_users_service),
+    user_service: UserService = Depends(get_user_service),
 ) -> Any:
     user: UserModel = user_service.authenticate_user(email=form_data.username, password=form_data.password)
     if not user:

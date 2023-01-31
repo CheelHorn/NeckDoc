@@ -1,23 +1,31 @@
-from typing import Any, Optional
+from typing import Any, Optional, Type, TypeVar
 
 import sqlalchemy
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
-from db.models import User
+# Pydantic schemas
 from schemas.user import UserCreate, UserUpdate
+
+from pydantic import BaseModel
+
+# SQLAlchemy models
+from db.models import Base, User
 
 from .base import BaseService
 
 from utils.auth import get_password_hash, verify_password
 
+ModelType = TypeVar("ModelType", bound=Base)
+CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
+UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
-class UserService(BaseService[User, UserCreate, UserUpdate]):
-    def __init__(self, db_session: Session):
-        super(UserService, self).__init__(User, db_session)
+class UserService(BaseService[ModelType, CreateSchemaType, UpdateSchemaType]):
+    def __init__(self, user_model: Type[ModelType], db_session: Session):
+        super(UserService, self).__init__(user_model, db_session)
 
     def create(self, obj: UserCreate) -> User:
-        user: User = self.model(email=obj.email, hashed_password=get_password_hash(obj.password))
+        user = self.model(email=obj.email, hashed_password=get_password_hash(obj.password))
         self.db_session.add(user)
         try:
             self.db_session.commit()

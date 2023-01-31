@@ -16,6 +16,43 @@ class User(Base):
     lastname = Column(String(256), nullable=True)
     date_of_birth = Column(Date, nullable=True)
     hashed_password = Column(String, nullable=False)
+    is_admin = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
+    type = Column(String(20))
+
+    __mapper_args__ = {
+        "polymorphic_identity": "users",
+        "polymorphic_on": "type",
+    }
+
+class Patient(User):
+    __tablename__ = "patients"
+    id = Column(ForeignKey("users.id"), primary_key=True)
+    social_security_number = Column(String(256), nullable=True)
+
+    __mapper_args__ = {
+        "polymorphic_identity": "patients",
+    }
+
+
+class Therapist(User):
+    __tablename__ = "therapists"
+    id = Column(ForeignKey("users.id"), primary_key=True)
+    clinic = Column(String(256), nullable=True)
+
+    __mapper_args__ = {
+        "polymorphic_identity": "therapists",
+    }
+
+class Therapy(Base):
+    __tablename__ = "therapies"
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
+    patient_id = Column(ForeignKey("patients.id"))
+    patient = relationship("Patient", backref="therapies")
+    therapist_id = Column(ForeignKey("therapists.id"))
+    therapist = relationship("Therapist", backref="therapies")
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date, nullable=True)
     is_active = Column(Boolean, default=True)
 
 class Exercise(Base):
@@ -29,8 +66,8 @@ class Exercise(Base):
 class Training(Base):
     __tablename__ = "trainings"
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
-    user_id = Column(ForeignKey("users.id"))
-    user = relationship("User", backref="trainings")
+    patient_id = Column(ForeignKey("patients.id"))
+    patient = relationship("Patient", backref="trainings")
     exercise_id = Column(ForeignKey("exercises.id"))
     exercise = relationship("Exercise", backref="trainings")
     video_path = Column(String(256), nullable=True)

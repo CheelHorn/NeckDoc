@@ -3,7 +3,6 @@ from typing import Any, Optional
 from pydantic import BaseModel, Json
 from pydantic.types import UUID4
 
-from .user import User
 from .exercise import Exercise
 
 class TrainingBase(BaseModel):
@@ -13,7 +12,7 @@ class TrainingBase(BaseModel):
 
 
 class TrainingCreate(TrainingBase):
-    user_id: UUID4
+    patient_id: UUID4
     exercise_id: UUID4
 
 
@@ -24,7 +23,7 @@ class TrainingUpdate(TrainingBase):
         
 class Training(TrainingBase):
     id: UUID4
-    user: User
+    patient_id: UUID4
     exercise: Exercise
 
     class Config:

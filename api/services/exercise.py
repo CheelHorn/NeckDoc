@@ -1,10 +1,14 @@
 from typing import Any, Optional
 
 from sqlalchemy.orm import Session
-from fastapi import HTTPException, UploadFile
+from fastapi import UploadFile
 
-from db.models import Exercise
+# Pydantic schemas
 from schemas.exercise import ExerciseCreate, ExerciseUpdate
+
+# SqlAlchemy models
+from db.models import Exercise
+
 
 from .base import BaseService
 

@@ -3,8 +3,11 @@ from typing import Any, Optional
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, UploadFile
 
-from db.models import Training, User, Exercise
+# Pydantic schemas
 from schemas.training import TrainingCreate, TrainingUpdate
+
+# SQLAlchemy models
+from db.models import Training, Patient, Exercise
 
 from .base import BaseService
 
@@ -16,13 +19,13 @@ class TrainingService(BaseService[Training, TrainingCreate, TrainingUpdate]):
         super(TrainingService, self).__init__(Training, db_session)
 
     def create(self, obj: TrainingCreate, db_session: Session) -> Training:
-        user = db_session.query(User).get(obj.user_id)
+        patient = db_session.query(Patient).get(obj.patient_id)
         exercise = self.db_session.query(Exercise).get(obj.exercise_id)
 
-        if user is None:
+        if patient is None:
             raise HTTPException(
                 status_code=400,
-                detail=f"User with userId = {obj.user_id} not found.",
+                detail=f"User with userId = {obj.patient_id} not found.",
             )
 
         if exercise is None:

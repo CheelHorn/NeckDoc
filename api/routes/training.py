@@ -3,18 +3,18 @@ from typing import Any, List, Optional
 from fastapi import APIRouter, Depends
 from pydantic.types import UUID4
 
-# Pydantic schema
+# Pydantic schemas
 from schemas.training import Training, TrainingCreate, TrainingUpdate
 
-# DB Models
+# SQLAlchemy models
 from db import models
 
-# Service functions for users
+# Service functions
 from services import TrainingService, get_training_service
 
 router = APIRouter(
-    prefix="/user",
-    tags=["user"],
+    prefix="/training",
+    tags=["training"],
 )
 
 @router.get("/", response_model=List[Training])

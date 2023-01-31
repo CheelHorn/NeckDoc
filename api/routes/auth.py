@@ -6,14 +6,14 @@ from fastapi.security import OAuth2PasswordRequestForm
 from utils.auth import create_access_token
 from utils.dependencies import get_current_user
 
-# SQLAlchemy Models
+# Pydantic schemas
+from schemas.user import User, UserCreate, UserUpdate, Patient, Therapist
+
+# SQLAlchemy models
 from db import models
 
-# Pydantic schema
-from schemas.user import User, UserCreate, UserUpdate
-
 # Service functions for users
-from services import UsersService, get_users_service
+from services import UserService, get_user_service, get_patient_service, get_therapist_service
 
 router = APIRouter(
     prefix="/auth",
@@ -21,19 +21,24 @@ router = APIRouter(
 )
 
 
-@router.post('/signup', response_model=User, status_code=201)
-async def create_user(
-    new_user: UserCreate,
-    user_service: UsersService = Depends(get_users_service),
-) -> Optional[models.User]:
-    return user_service.create(new_user)
+@router.post('/signup/patient', response_model=Patient, status_code=201)
+async def signup_patient(
+    new_patient: UserCreate,
+    patient_service: UserService = Depends(get_patient_service),
+) -> Optional[models.Patient]:
+    return patient_service.create(new_patient)
 
+@router.post('/signup/therapist', response_model=Therapist, status_code=201)
+async def signup_therapist(
+    new_therapist: UserCreate,
+    therapist_service: UserService = Depends(get_therapist_service),
+) -> Optional[models.Therapist]:
+    return therapist_service.create(new_therapist)
 
-# Change to login, only for swagger demonstration
 @router.post("/login", responses={400: {"description": "Incorrect username or password"}},)
-async def login_user(
+async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    user_service: UsersService = Depends(get_users_service),
+    user_service: UserService = Depends(get_user_service),
 ) -> Any:
     user: models.User = user_service.authenticate_user(email=form_data.username, password=form_data.password)
     if not user:
@@ -45,7 +50,7 @@ async def login_user(
 
 
 @router.get("/me", response_model=User)
-async def get_me(
+async def me(
     current_user: models.User = Depends(get_current_user),
 ) -> Optional[models.User]:
     return current_user
