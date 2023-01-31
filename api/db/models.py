@@ -1,5 +1,5 @@
 from typing import Any
-from sqlalchemy import Column, String, Integer, SmallInteger, Boolean, Date, PickleType
+from sqlalchemy import Column, String, Integer, SmallInteger, Boolean, Date, JSON
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -17,7 +17,6 @@ class User(Base):
     date_of_birth = Column(Date, nullable=True)
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
-    trainings = relationship("UserTraining", backref="user")
 
 class Exercise(Base):
     __tablename__ = "exercises"
@@ -31,7 +30,9 @@ class Training(Base):
     __tablename__ = "trainings"
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     user_id = Column(ForeignKey("users.id"))
+    user = relationship("User", backref="trainings")
     exercise_id = Column(ForeignKey("exercises.id"))
+    exercise = relationship("Exercise", backref="trainings")
     video_path = Column(String(256), nullable=True)
-    results = Column(PickleType, nullable=True)
+    results = Column(JSON, nullable=True)
     is_successful = Column(Boolean)

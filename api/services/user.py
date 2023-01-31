@@ -5,16 +5,16 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
 from db.models import User
-from schemas.users import UserCreate, UserUpdate
+from schemas.user import UserCreate, UserUpdate
 
 from .base import BaseService
 
 from utils.auth import get_password_hash, verify_password
 
 
-class UsersService(BaseService[User, UserCreate, UserUpdate]):
+class UserService(BaseService[User, UserCreate, UserUpdate]):
     def __init__(self, db_session: Session):
-        super(UsersService, self).__init__(User, db_session)
+        super(UserService, self).__init__(User, db_session)
 
     def create(self, obj: UserCreate) -> User:
         user: User = self.model(email=obj.email, hashed_password=get_password_hash(obj.password))

@@ -7,10 +7,12 @@ from fastapi.middleware.cors import CORSMiddleware
 # SQLAlchemy Models
 from db.models import User as UserModel
 
-# CRUD functions for users
-from crud import UsersService, get_users_service
+# Service functions for users
+from services import UsersService, get_users_service
 
-from routes import auth, users, exercises
+from routes import auth, user, exercise, training
+
+from routes.training import TrainingRouter
 
 
 app = FastAPI()
@@ -29,8 +31,9 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
-app.include_router(users.router)
-app.include_router(exercises.router)
+app.include_router(user.router)
+app.include_router(exercise.router)
+app.include_router(training.router)
 
 
 # Change to login, only for swagger demonstration

@@ -11,3 +11,4 @@ BUFF_SIZE = 65536
 
 # file paths
 EXERCISE_IMAGES_PATH = "/assets/images/exercise/"
+TRAINING_VIDEOS_PATH = "/assets/video/training/"

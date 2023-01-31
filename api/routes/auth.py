@@ -10,10 +10,10 @@ from utils.dependencies import get_current_user
 from db import models
 
 # Pydantic schema
-from schemas.users import User, UserCreate, UserUpdate
+from schemas.user import User, UserCreate, UserUpdate
 
-# CRUD functions for users
-from crud import UsersService, get_users_service
+# Service functions for users
+from services import UsersService, get_users_service
 
 router = APIRouter(
     prefix="/auth",
@@ -21,7 +21,7 @@ router = APIRouter(
 )
 
 
-@router.post('/signup', response_model=User, status_code=201, responses={409: {"description": "Conflict Error"}},)
+@router.post('/signup', response_model=User, status_code=201)
 async def create_user(
     new_user: UserCreate,
     user_service: UsersService = Depends(get_users_service),

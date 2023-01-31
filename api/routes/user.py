@@ -9,19 +9,19 @@ from utils.dependencies import get_current_user
 from db import models
 
 # Pydantic schema
-from schemas.users import User, UserCreate, UserUpdate
+from schemas.user import User, UserCreate, UserUpdate
 
-# CRUD functions for users
-from crud import UsersService, get_users_service
+# service functions for users
+from services import UsersService, get_users_service
 
 router = APIRouter(
-    prefix="/users",
-    tags=["users"],
+    prefix="/user",
+    tags=["user"],
 )
 
 
 @router.get("/", response_model=List[User])
-async def get_users(
+async def list(
     skip: int = 0,
     limit: int = 100,
     user_service: UsersService = Depends(get_users_service),
@@ -29,16 +29,16 @@ async def get_users(
     return user_service.list(skip=skip, limit=limit)
 
 
-@router.get("/{user_id}", response_model=User, responses={404: {"description": "User not found"}})
-async def get_user(
+@router.get("/{user_id}", response_model=User)
+async def get(
     user_id: UUID4,
     user_service: UsersService = Depends(get_users_service),
 ) -> Optional[models.User]:
     return user_service.get(user_id)
 
 
-@router.patch("/{user_id}", response_model=User, responses={401: {"description": "No permission"}, 404: {"description": "User not found"}})
-async def update_user(
+@router.patch("/{user_id}", response_model=User)
+async def update(
     user_id: UUID4,
     user: UserUpdate,
     current_user: User = Depends(get_current_user),

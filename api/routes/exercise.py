@@ -8,21 +8,21 @@ from pydantic.types import UUID4
 from db import models
 
 # Pydantic schema
-from schemas.exercises import Exercise, ExerciseCreate, ExerciseUpdate
+from schemas.exercise import Exercise, ExerciseCreate, ExerciseUpdate
 
-# CRUD functions for users
-from crud import ExcerciseService, get_exercise_service
+# Service functions for users
+from services import ExcerciseService, get_exercise_service
 
 from utils.file_handling import image_whitelist
 
 router = APIRouter(
-    prefix="/exercises",
-    tags=["exercises"],
+    prefix="/exercise",
+    tags=["exercise"],
 )
 
 
 @router.get("/", response_model=List[Exercise])
-async def get_exercises(
+async def list(
     skip: int = 0,
     limit: int = 100,
     exercise_service: ExcerciseService = Depends(get_exercise_service),
@@ -30,16 +30,16 @@ async def get_exercises(
     return exercise_service.list(skip=skip, limit=limit)
 
 
-@router.get("/{exercise_id}", response_model=Exercise, responses={404: {"description": "Exercise not found"}})
-async def get_exercise(
+@router.get("/{exercise_id}", response_model=Exercise)
+async def get(
     exercise_id: UUID4,
     exercise_service: ExcerciseService = Depends(get_exercise_service),
 ) -> Optional[models.Exercise]:
     return exercise_service.get(exercise_id)
 
 
-@router.post("/", response_model=Exercise, status_code=201, responses={409: {"description": "Conflict Error"}})
-async def create_exercise(
+@router.post("/", response_model=Exercise, status_code=201)
+async def create(
     exercise: ExerciseCreate,
     exercise_service: ExcerciseService = Depends(get_exercise_service),
 ) -> models.Exercise:
@@ -47,16 +47,23 @@ async def create_exercise(
 
 
 @router.patch("/{exercise_id}", response_model=Exercise)
-async def update_exercise(
+async def update(
     exercise_id: UUID4,
     exercise: ExerciseUpdate,
     exercise_service: ExcerciseService = Depends(get_exercise_service),
 ) -> Optional[models.Exercise]:
     return exercise_service.update(exercise_id, exercise)
 
+@router.delete("/{exercise_id}", status_code=204)
+async def delete(
+    exercise_id: UUID4,
+    exercise_service: ExcerciseService = Depends(get_exercise_service),
+) -> Any:
+    exercise_service.delete(exercise_id)
+    return Response(status_code=204)
 
 @router.get("/{exercise_id}/image", response_class=FileResponse)
-async def get_exercise_image(
+async def get_image(
     exercise_id: UUID4,
     exercise_service: ExcerciseService = Depends(get_exercise_service),
 ) -> Optional[FileResponse]:
@@ -65,7 +72,7 @@ async def get_exercise_image(
 
 
 @router.post("/{exercise_id}/image", response_model=Exercise, responses={400: {"description": "Invalid document type"}})
-async def upload_exercise_image(
+async def upload_image(
     exercise_id: UUID4,
     image_file: UploadFile = File(...),
     exercise_service: ExcerciseService = Depends(get_exercise_service),
@@ -75,10 +82,3 @@ async def upload_exercise_image(
     return exercise_service.update_image(exercise_id, image_file)
 
 
-@router.delete("/{exercise_id}", status_code=204)
-async def delete_exercise(
-    exercise_id: UUID4,
-    exercise_service: ExcerciseService = Depends(get_exercise_service),
-) -> Any:
-    exercise_service.delete(exercise_id)
-    return Response(status_code=204)

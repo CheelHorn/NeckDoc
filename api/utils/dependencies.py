@@ -5,8 +5,8 @@ from fastapi import Depends
 # SQLAlchemy Models
 from db.models import User as UserModel
 
-# CRUD functions for users
-from crud import UsersService, get_users_service
+# Service functions for users
+from services import UsersService, get_users_service
 
 from utils.auth import decode_token_data, credentials_exception
 

@@ -3,8 +3,6 @@ from typing import Optional
 from pydantic import BaseModel
 from pydantic.types import UUID4, conint
 
-from datetime import date
-
 class ExerciseBase(BaseModel):
     name: Optional[str]
     description: Optional[str]

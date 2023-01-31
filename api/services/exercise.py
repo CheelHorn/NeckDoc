@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException, UploadFile
 
 from db.models import Exercise
-from schemas.exercises import ExerciseCreate, ExerciseUpdate
+from schemas.exercise import ExerciseCreate, ExerciseUpdate
 
 from .base import BaseService
 
