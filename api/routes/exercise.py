@@ -54,19 +54,21 @@ async def update(
 ) -> Optional[models.Exercise]:
     return exercise_service.update(exercise_id, exercise)
 
+
 @router.delete("/{exercise_id}", status_code=204)
 async def delete(
     exercise_id: UUID4,
     exercise_service: ExcerciseService = Depends(get_exercise_service),
-) -> Any:
+) -> None:
     exercise_service.delete(exercise_id)
     return Response(status_code=204)
 
-@router.get("/{exercise_id}/image", response_class=FileResponse)
+
+@router.get("/{exercise_id}/image")
 async def get_image(
     exercise_id: UUID4,
     exercise_service: ExcerciseService = Depends(get_exercise_service),
-) -> Optional[FileResponse]:
+) -> str:
     image_path: Exercise = exercise_service.get_image_path(exercise_id)
     return image_path
 

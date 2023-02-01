@@ -17,6 +17,7 @@ router = APIRouter(
     tags=["training"],
 )
 
+
 @router.get("/", response_model=List[Training])
 async def list(
     skip: int = 0,
@@ -25,6 +26,7 @@ async def list(
 ) -> List[models.Training]:
     return training_service.list(skip=skip, limit=limit)
 
+
 @router.get("/{training_id}", response_model=Training)
 async def get(
     training_id: UUID4,
@@ -32,12 +34,14 @@ async def get(
 ) -> Optional[models.Training]:
     return training_service.get(training_id)
 
+
 @router.post("/", response_model=Training)
 async def create(
     training: TrainingCreate,
     training_service: TrainingService = Depends(get_training_service),
 ) -> Optional[models.Training]:
     return training_service.create(training)
+
 
 @router.patch("/{training_id}", response_model=Training)
 async def update(    
@@ -47,9 +51,10 @@ async def update(
 ) -> Optional[models.Training]:
     return training_service.update(training_id, training)
 
+
 @router.delete("/{training_id}", response_model=Training)
 async def delete(
     training_id: UUID4,
     training_service: TrainingService = Depends(get_training_service),
-) -> Any:
+) -> None:
     return training_service.delete(training_id)

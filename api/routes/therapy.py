@@ -17,6 +17,7 @@ router = APIRouter(
     tags=["therapy"],
 )
 
+
 @router.get("/", response_model=List[Therapy])
 async def list(
     skip: int = 0,
@@ -25,6 +26,7 @@ async def list(
 ) -> List[models.Therapy]:
     return therapy_service.list(skip=skip, limit=limit)
 
+
 @router.get("/{therapy_id}", response_model=Therapy)
 async def get(
     therapy_id: UUID4,
@@ -32,12 +34,14 @@ async def get(
 ) -> Optional[models.Therapy]:
     return therapy_service.get(therapy_id)
 
+
 @router.post("/", response_model=Therapy)
 async def create(
     therapy: TherapyCreate,
     therapy_service: TherapyService = Depends(get_therapy_service),
 ) -> Optional[models.Therapy]:
     return therapy_service.create(therapy)
+
 
 @router.patch("/{therapy_id}", response_model=Therapy)
 async def update(
@@ -47,9 +51,10 @@ async def update(
 ) -> Optional[models.Therapy]:
     return therapy_service.update(therapy_id, therapy)
 
+
 @router.delete("/{therapy_id}", response_model=Therapy)
 async def delete(
     therapy_id: UUID4,
     therapy_service: TherapyService = Depends(get_therapy_service),
-) -> Any:
+) -> None:
     return therapy_service.delete(therapy_id)

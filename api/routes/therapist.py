@@ -46,6 +46,6 @@ async def update(
 async def delete(
     therapist_id: UUID4,
     therapist_service: TherapistService = Depends(get_therapist_service),
-) -> Any:
+) -> None:
     therapist_service.delete(therapist_id)
     return Response(status_code=204)
