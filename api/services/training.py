@@ -1,13 +1,14 @@
 from typing import Any, Optional
 
 from sqlalchemy.orm import Session
-from fastapi import HTTPException, UploadFile
+from fastapi import Depends, HTTPException, UploadFile
 
 # Pydantic schemas
 from schemas.training import TrainingCreate, TrainingUpdate
 
 # SQLAlchemy models
 from db.models import Training, Patient, Exercise
+from db.session import get_db
 
 from .base import BaseService
 
@@ -42,3 +43,6 @@ class TrainingService(BaseService[Training, TrainingCreate, TrainingUpdate]):
         exercise.image_path = file_path
         return self.update(training_id, TrainingUpdate.from_orm(exercise), db_session)
         
+
+def get_training_service(db_session: Session = Depends(get_db)) -> TrainingService:
+    return TrainingService(db_session)

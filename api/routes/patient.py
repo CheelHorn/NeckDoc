@@ -1,6 +1,7 @@
 from typing import Any, List, Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
+from pydantic.types import UUID4
 
 # Pydantic schemas
 from schemas.user import Patient, PatientUpdate
@@ -9,7 +10,7 @@ from schemas.user import Patient, PatientUpdate
 from db import models
 
 # Service functions
-from services import UserService, get_patient_service
+from services.patient import PatientService, get_patient_service
 
 router = APIRouter(
     prefix="/patient",
@@ -17,9 +18,33 @@ router = APIRouter(
 )
 
 @router.get("/", response_model=List[Patient])
-async def list(
-    skip: int = 0,
-    limit: int = 100,
-    patient_service: UserService = Depends(get_patient_service),
-) -> List[models.Patient]:
-    return patient_service.list(skip=skip, limit=limit)
+async def get(
+    patient_service: PatientService = Depends(get_patient_service),
+) -> Optional[list[models.Patient]]:
+    return patient_service.list()
+
+
+@router.get("/{patient_id}", response_model=Patient)
+async def get(
+    patient_id: UUID4,
+    patient_service: PatientService = Depends(get_patient_service),
+) -> Optional[models.Patient]:
+    return patient_service.get(patient_id)
+
+
+@router.patch("/{patient_id}", response_model=Patient)
+async def update(
+    patient_id: UUID4,
+    patient: PatientUpdate,
+    patient_service: PatientService = Depends(get_patient_service),
+) -> Optional[models.Patient]:
+    return patient_service.update(patient_id, patient)
+
+
+@router.delete("/{patient_id}", status_code=204)
+async def delete(
+    patient_id: UUID4,
+    patient_service: PatientService = Depends(get_patient_service),
+) -> Any:
+    patient_service.delete(patient_id)
+    return Response(status_code=204)

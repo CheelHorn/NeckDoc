@@ -10,7 +10,7 @@ from schemas.training import Training, TrainingCreate, TrainingUpdate
 from db import models
 
 # Service functions
-from services import TrainingService, get_training_service
+from services.training import TrainingService, get_training_service
 
 router = APIRouter(
     prefix="/training",

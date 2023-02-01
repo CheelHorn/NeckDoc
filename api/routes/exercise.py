@@ -11,7 +11,7 @@ from schemas.exercise import Exercise, ExerciseCreate, ExerciseUpdate
 from db import models
 
 # Service functions
-from services import ExcerciseService, get_exercise_service
+from services.exercise import ExcerciseService, get_exercise_service
 
 from utils.file_handling import image_whitelist
 

@@ -10,7 +10,7 @@ from schemas.therapy import Therapy, TherapyCreate, TherapyUpdate
 from db import models
 
 # Service functions
-from services import TherapyService, get_therapy_service
+from services.therapy import TherapyService, get_therapy_service
 
 router = APIRouter(
     prefix="/therapy",

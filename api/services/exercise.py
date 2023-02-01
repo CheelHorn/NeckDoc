@@ -1,14 +1,14 @@
 from typing import Any, Optional
 
 from sqlalchemy.orm import Session
-from fastapi import UploadFile
+from fastapi import Depends, UploadFile
 
 # Pydantic schemas
 from schemas.exercise import ExerciseCreate, ExerciseUpdate
 
 # SqlAlchemy models
 from db.models import Exercise
-
+from db.session import get_db
 
 from .base import BaseService
 
@@ -29,3 +29,6 @@ class ExcerciseService(BaseService[Exercise, ExerciseCreate, ExerciseUpdate]):
         file_path = save_image_file(image_file, EXERCISE_IMAGES_PATH)
         exercise.image_path = file_path
         return self.update(exercise_id, ExerciseUpdate.from_orm(exercise))
+
+def get_exercise_service(db_session: Session = Depends(get_db)) -> ExcerciseService:
+    return ExcerciseService(db_session)

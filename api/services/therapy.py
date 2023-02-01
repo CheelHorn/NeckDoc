@@ -1,11 +1,12 @@
 from sqlalchemy.orm import Session
-from fastapi import HTTPException
+from fastapi import Depends, HTTPException
 
 # Pydantic schemas
 from schemas.therapy import TherapyCreate, TherapyUpdate
 
 # SQLAlchemy models
 from db.models import Therapy, Patient, Therapist
+from db.session import get_db
 
 from .base import BaseService
 
@@ -30,3 +31,7 @@ class TherapyService(BaseService[Therapy, TherapyCreate, TherapyUpdate]):
             )
 
         return super(TherapyService, self).create(obj)
+
+
+def get_therapy_service(db_session: Session = Depends(get_db)) -> TherapyService:
+    return TherapyService(db_session)

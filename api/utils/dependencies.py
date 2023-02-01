@@ -1,17 +1,16 @@
 from typing import Optional
-
 from fastapi import Depends
 
-# SQLAlchemy Models
-from db.models import User as UserModel
-
-# Service functions for users
-from services import UserService, get_user_service
+# SqlAlchemy models
+from db.models import User
 
 from utils.auth import decode_token_data, credentials_exception
 
-def get_current_user(user_service: UserService = Depends(get_user_service), token_data: str = Depends(decode_token_data)) -> Optional[UserModel]:
-    user: UserModel = user_service.get_by_email(token_data.username)
+# Service functions
+from services.auth import AuthService, get_auth_service
+
+def get_current_user(auth_service: AuthService = Depends(get_auth_service), token_data: str = Depends(decode_token_data)) -> Optional[User]:
+    user: User = auth_service.get_user_by_email(token_data.username)
     if not user:
         raise credentials_exception
     return user
