@@ -1,8 +1,7 @@
 from typing import Any
 from sqlalchemy import Column, String, Integer, SmallInteger, Boolean, Date, JSON
 from sqlalchemy.sql.schema import ForeignKey
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
