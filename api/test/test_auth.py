@@ -30,7 +30,8 @@ def test_login_patient():
         "/token",
         data={
             "username": "patient1@mail.com", 
-            "password": "password"},
+            "password": "password"
+        },
         headers={"content-type": "application/x-www-form-urlencoded"}
     )
 

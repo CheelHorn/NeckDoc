@@ -16,7 +16,7 @@ from services.auth import AuthService, get_auth_service
 from services.patient import PatientService, get_patient_service
 from services.therapist import TherapistService, get_therapist_service
 
-from utils.dependencies import get_current_user
+from utils.auth import decode_token_data
 
 router = APIRouter(
     prefix="",
@@ -63,6 +63,7 @@ async def get_users(
 
 @router.get("/me", response_model=User)
 async def me(
-    current_user: models.User = Depends(get_current_user),
+    token_data: str = Depends(decode_token_data),
+    auth_service: AuthService = Depends(get_auth_service),
 ) -> Optional[models.User]:
-    return current_user
+    return auth_service.get_current_user(token_data)

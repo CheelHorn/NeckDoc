@@ -61,6 +61,13 @@ class AuthService():
             return None
         return user
 
+    
+    def get_current_user(self, token_data: str) -> Optional[User]:
+        user: User = self.get_user_by_email(token_data.username)
+        if not user:
+            raise HTTPException(status_code=404, detail="Not Found")
+        return user
+
 
 def get_auth_service(db_session: Session = Depends(get_db)) -> AuthService:
     return AuthService(db_session)
