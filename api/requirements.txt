@@ -12,3 +12,5 @@ python-dotenv
 uuid
 pytest
 httpx
+asyncio
+requests
