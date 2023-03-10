@@ -1,6 +1,6 @@
 from typing import List, Optional, Any
 
-from fastapi import APIRouter, Depends, Response, File, UploadFile
+from fastapi import APIRouter, Depends, Response, File, UploadFile, WebSocket
 from pydantic.types import UUID4
 
 # Pydantic schemas
@@ -12,10 +12,7 @@ from db import models
 # Service functions
 from features.training_plan.services.exercise_execution import ExerciseExecutionService, get_exercise_execution_service
 
-import httpx
-import asyncio
 import requests
-import json
 
 router = APIRouter(
     prefix="/exercise_execution",
@@ -89,3 +86,11 @@ def delete(
 ) -> None:
     exercise_execution_service.delete(exercise_execution_id)
     return Response(status_code=204)
+
+
+@router.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    while True:
+        data = await websocket.receive_text()
+        await websocket.send_text(f"Message text was: {data}")

@@ -7,6 +7,8 @@ import uuid
 
 Base: Any = declarative_base()
 
+from shared.config import EXERCISE_IMAGE_PATH
+
 class User(Base):
     __tablename__ = "user"
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
@@ -66,7 +68,7 @@ class ExerciseImage(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     position = Column(SmallInteger, nullable=False)
     exercise_id = Column(ForeignKey("exercise.id"))
-    image_url = Column(String(256), nullable=False)
+    image_url = Column(String(256), default=EXERCISE_IMAGE_PATH+"default.png")
 
     exercise = relationship("Exercise", backref="exercise_images")
 

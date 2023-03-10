@@ -35,6 +35,14 @@ def get(
     return training_plan_exercise_service.get(training_plan_exercise_id)
 
 
+@router.get("/patient/{patient_id}", response_model=List[TrainingPlanExercise])
+def get_by_patient_id(
+    patient_id: UUID4,
+    training_plan_exercise_service: TrainingPlanExerciseService = Depends(get_training_plan_exercise_service),
+) -> List[models.TrainingPlan]:
+    return training_plan_exercise_service.get_by_patient_id(patient_id)
+
+
 @router.post("/", response_model=TrainingPlanExercise)
 def create(
     training_plan_exercise: TrainingPlanExerciseCreate,

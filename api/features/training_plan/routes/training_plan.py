@@ -35,7 +35,7 @@ def get(
     return training_plan_service.get(training_plan_id)
 
 
-@router.get("/patient/{patient_id}", response_model=TrainingPlan)
+@router.get("/patient/{patient_id}", response_model=List[TrainingPlan])
 def get_by_patient_id(
     patient_id: UUID4,
     training_plan_service: TrainingPlanService = Depends(get_training_plan_service),

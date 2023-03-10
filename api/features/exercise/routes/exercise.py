@@ -1,19 +1,17 @@
 from typing import Any, List, Optional
 
-from fastapi import APIRouter, Depends, Response, File, UploadFile, HTTPException
-from fastapi.responses import FileResponse
+from fastapi import APIRouter, Depends, Response
 from pydantic.types import UUID4
 
 # Pydantic schemas
 from features.exercise.schemas.exercise import Exercise, ExerciseCreate, ExerciseUpdate
+from pydantic.types import UUID4
 
 # SQLAlchemy models
 from db import models
 
 # Service functions
 from features.exercise.services.exercise import ExcerciseService, get_exercise_service
-
-from shared.file_handling import image_whitelist
 
 router = APIRouter(
     prefix="/exercise",
@@ -62,16 +60,3 @@ def delete(
 ) -> None:
     exercise_service.delete(exercise_id)
     return Response(status_code=204)
-
-
-@router.post("/{exercise_id}/image", response_model=Exercise, responses={400: {"description": "Invalid document type"}})
-def upload_image(
-    exercise_id: UUID4,
-    image_file: UploadFile = File(...),
-    exercise_service: ExcerciseService = Depends(get_exercise_service),
-) -> Optional[models.Exercise]:
-    if image_file.content_type not in image_whitelist:
-        raise HTTPException(400)
-    return exercise_service.update_image(exercise_id, image_file)
-
-

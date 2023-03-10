@@ -1,13 +1,14 @@
-from typing import Any, Optional
+from typing import List
 
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException, UploadFile
 
 # Pydantic schemas
 from features.training_plan.schemas.training_plan_exercise import TrainingPlanExerciseCreate, TrainingPlanExerciseUpdate
+from pydantic.types import UUID4
 
 # SQLAlchemy models
-from db.models import TrainingPlanExercise, TrainingPlan, Exercise, ExerciseDuration, ExerciseInterval
+from db.models import TrainingPlanExercise, TrainingPlan, Exercise, ExerciseDuration, ExerciseInterval, Therapy
 from db.session import get_db
 
 from shared.base import BaseService
@@ -47,6 +48,9 @@ class TrainingPlanExerciseService(BaseService[TrainingPlanExercise, TrainingPlan
             )
 
         return super(TrainingPlanExerciseService, self).create(obj)
+    
+    def get_by_patient_id(self, patient_id: UUID4) -> List[TrainingPlanExercise]:
+        return self.db_session.query(TrainingPlanExercise).join(TrainingPlan).join(Therapy).filter(Therapy.patient_id == patient_id).all()
     
     
 def get_training_plan_exercise_service(db_session: Session = Depends(get_db)) -> TrainingPlanExerciseService:

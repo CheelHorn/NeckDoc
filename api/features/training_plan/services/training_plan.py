@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
 
@@ -27,8 +29,8 @@ class TrainingPlanService(BaseService[TrainingPlan, TrainingPlanCreate, Training
         return super(TrainingPlanService, self).create(obj)
     
 
-    def get_by_patient_id(self, patient_id: UUID4) -> TrainingPlan:
-        return self.db_session.query(TrainingPlan).join(Therapy).filter(Therapy.patient_id == patient_id).first()
+    def get_by_patient_id(self, patient_id: UUID4) -> List[TrainingPlan]:
+        return self.db_session.query(TrainingPlan).join(Therapy).filter(Therapy.patient_id == patient_id).all()
     
 
 def get_training_plan_service(db_session: Session = Depends(get_db)) -> TrainingPlanService:
