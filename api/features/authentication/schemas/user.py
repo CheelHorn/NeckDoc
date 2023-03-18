@@ -14,7 +14,6 @@ class UserBase(BaseModel):
     lastname: Optional[str]
     date_of_birth: Optional[date]
     is_active: Optional[bool]
-    type: Optional[str]
 
 class UserCreate(UserBase):
     password: str
@@ -25,6 +24,7 @@ class UserUpdate(UserBase):
 class User(UserBase):
     id: UUID4
     is_admin: bool
+    type: str
     
     class Config:
         orm_mode = True

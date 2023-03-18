@@ -52,7 +52,6 @@ class AuthService():
                 raise e
         return user
 
-
     def authenticate(self, email: Any, password: str) -> Optional[User]:
         user: Optional[User] = self.get_user_by_email(email)
         if not user:
@@ -66,6 +65,15 @@ class AuthService():
         user: User = self.get_user_by_email(token_data.username)
         if not user:
             raise HTTPException(status_code=404, detail="Not Found")
+        return user
+    
+    def update_current_user(self, token_data: str, obj: UserUpdate) -> Optional[User]:
+        user: User = self.get_user_by_email(token_data.username)
+        if not user:
+            raise HTTPException(status_code=404, detail="Not Found")
+        for column, value in obj.dict(exclude_unset=True).items():
+            setattr(user, column, value)
+        self.db_session.commit()
         return user
 
 

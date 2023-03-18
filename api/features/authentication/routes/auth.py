@@ -65,3 +65,12 @@ def me(
     auth_service: AuthService = Depends(get_auth_service),
 ) -> Optional[models.User]:
     return auth_service.get_current_user(token_data)
+
+
+@router.patch("/me", response_model=User)
+def update_me(
+    updated_user: UserUpdate,
+    token_data: str = Depends(decode_token_data),
+    auth_service: AuthService = Depends(get_auth_service),
+) -> Optional[models.User]:
+    return auth_service.update_current_user(token_data, updated_user)
