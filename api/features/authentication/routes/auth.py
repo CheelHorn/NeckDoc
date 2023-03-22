@@ -38,14 +38,12 @@ def signup_therapist(
     return therapist_service.create(new_therapist)
 
 
-@router.post("/token", responses={400: {"description": "Incorrect username or password"}},)
+@router.post("/token")
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     auth_service: AuthService = Depends(get_auth_service),
 ) -> Any:
     user: models.User = auth_service.authenticate(email=form_data.username, password=form_data.password)
-    if not user:
-        raise HTTPException(status_code=400)
     return {
         "access_token": create_access_token(sub=user.email),
         "token_type": "bearer",

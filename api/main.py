@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from features.authentication.routes import auth
 from features.exercise.routes import exercise, exercise_image
 from features.therapy.routes import patient, therapist, therapy
-from features.training_plan.routes import training_plan, exercise_duration, exercise_interval, training_plan_exercise, exercise_execution
+from features.training_plan.routes import training_plan, exercise_duration, exercise_interval, training_plan_exercise, exercise_execution, video_stream
 
 app = FastAPI()
 app.mount("/assets", StaticFiles(directory="assets"), name="assets")
@@ -34,3 +34,4 @@ app.include_router(exercise_duration.router)
 app.include_router(exercise_interval.router)
 app.include_router(training_plan_exercise.router)
 app.include_router(exercise_execution.router)
+app.include_router(video_stream.router)

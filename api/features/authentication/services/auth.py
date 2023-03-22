@@ -53,11 +53,11 @@ class AuthService():
         return user
 
     def authenticate(self, email: Any, password: str) -> Optional[User]:
-        user: Optional[User] = self.get_user_by_email(email)
+        user: Optional[User] = self.db_session.query(User).filter(User.email == email).first()
         if not user:
-            raise HTTPException(status_code=404, detail="Not Found")
+            raise HTTPException(status_code=400, detail="Incorrect username or password")
         if not verify_password(password, user.hashed_password):
-            return None
+            raise HTTPException(status_code=400, detail="Incorrect username or password")
         return user
 
     
